@@ -34,7 +34,8 @@ def preprocess(image):
     x = np.repeat(x, 3, axis=2)
     
     # Normalize the pixel values to be between 0 and 1 and add a batch dimension
-    x = np.expand_dims(x / 255.0, axis=0)
+    x = np.expand_dims(x.astype(object) / 255.0, axis=0)
+
     
     return x
 
