@@ -35,8 +35,6 @@ def preprocess(image):
     
     # Normalize the pixel values to be between 0 and 1 and add a batch dimension
     x = np.expand_dims(x / 255.0, axis=0)
-
-
     
     return x
 
@@ -62,11 +60,13 @@ def app():
         prediction = model.predict(preprocessed_image)
         # Get the predicted class (0 = normal, 1 = pneumonia)
         predicted_class = np.argmax(prediction[0])
-        # Display the prediction result
+        # Get the probability of the predicted class
+        probability = prediction[0][predicted_class]
+        # Display the prediction result and probability
         if predicted_class == 0:
-            st.markdown('## Result: **You Have no Symptoms of Pneumonia**')
+            st.markdown(f'## Result: **You Have no Symptoms of Pneumonia** (Probability: {probability:.2%})')
         else:
-            st.markdown('## Result: **You might be Pneumonic,Please consult a doctor**')
+            st.markdown(f'## Result: **You might be Pneumonic, Please consult a doctor** (Probability: {probability:.2%})')
 
 if __name__ == '__main__':
     app()
