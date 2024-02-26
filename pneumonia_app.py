@@ -1,9 +1,9 @@
 import streamlit as st
 import tensorflow as tf
-import cv2
-import numpy as np
 from keras.applications import DenseNet121
 from keras.applications.imagenet_utils import preprocess_input
+from PIL import Image
+import numpy as np
 
 # Load the pre-trained DenseNet121 model
 model = DenseNet121(weights='imagenet', include_top=True)
@@ -14,16 +14,19 @@ def preprocess(image):
     Preprocesses an image to prepare it for input into a deep learning model.
     
     Args:
-        image: A numpy array representing the image to be preprocessed
+        image: A PIL Image object representing the image to be preprocessed
         
     Returns:
         A numpy array containing the preprocessed image
     """
     # Resize the image to (224, 224) as DenseNet121 requires this size
-    resized = cv2.resize(image, (224, 224))
+    resized = image.resize((224, 224))
+    
+    # Convert the image to a numpy array
+    x = np.array(resized)
     
     # Expand dimensions to create a batch dimension
-    x = np.expand_dims(resized, axis=0)
+    x = np.expand_dims(x, axis=0)
     
     # Preprocess the image using the preprocess_input function from DenseNet
     x = preprocess_input(x)
@@ -41,10 +44,8 @@ def app():
 
     # If a file is uploaded
     if file is not None:
-        # Read the image file as bytes
-        image_bytes = file.read()
-        # Convert the bytes to an OpenCV image
-        image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), -1)
+        # Open the image using Pillow
+        image = Image.open(file)
         # Preprocess the image
         preprocessed_image = preprocess(image)
         # Use the model to make a prediction
