@@ -1,9 +1,9 @@
 import streamlit as st
 import tensorflow as tf
-import numpy as np
 from keras.applications import DenseNet121
 from keras.applications.imagenet_utils import preprocess_input
 from PIL import Image
+import numpy as np
 
 # Load the pre-trained DenseNet121 model
 model = DenseNet121(weights='imagenet', include_top=True)
@@ -29,7 +29,7 @@ def preprocess(image):
     if x.shape[-1] == 1:  # If the image is grayscale
         x = np.stack((x, x, x), axis=-1)
     
-    # Expand dimensions to create a batch dimension
+    # Add batch dimension
     x = np.expand_dims(x, axis=0)
     
     # Preprocess the image using the preprocess_input function from DenseNet
@@ -52,13 +52,16 @@ def app():
         image = Image.open(file)
         # Preprocess the image
         preprocessed_image = preprocess(image)
-        # Use the model to make a prediction
-        prediction = model.predict(preprocessed_image)
-        # Decode the prediction and get the predicted class
-        decoded_prediction = tf.keras.applications.densenet.decode_predictions(prediction, top=1)[0][0]
-        predicted_class, class_name, probability = decoded_prediction
-        # Display the prediction result and probability
-        st.markdown(f'## Result: **{class_name}** (Probability: {probability:.2%})')
+        
+        # Ensure that the model input has the batch dimension
+        if preprocessed_image.shape[0] == 1:
+            # Use the model to make a prediction
+            prediction = model.predict(preprocessed_image)
+            # Decode the prediction and get the predicted class
+            decoded_prediction = tf.keras.applications.densenet.decode_predictions(prediction, top=1)[0][0]
+            predicted_class, class_name, probability = decoded_prediction
+            # Display the prediction result and probability
+            st.markdown(f'## Result: **{class_name}** (Probability: {probability:.2%})')
 
 if __name__ == '__main__':
     app()
