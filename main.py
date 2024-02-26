@@ -16,6 +16,9 @@ file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 # load classifier
 model = load_model('./model/pneumonia_classifier.h5')
 
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
 # load class names
 with open('./model/labels.txt', 'r') as f:
     class_names = [a[:-1].split(' ')[1] for a in f.readlines()]
