@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 # Load the trained model
-model = tf.keras.models.load_model('D:\Engineering\Projects\Pneumonia Prediction\Pneumonia_model.h5')
+model = tf.keras.models.load_model('Pneumonia_model.h5')
 
 # Function to preprocess the image
 import cv2
