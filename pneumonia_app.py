@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
-from tensorflow.keras.applications import DenseNet121
-from tensorflow.keras.applications.densenet import preprocess_input
+from tensorflow.keras.applications import DenseNet121, preprocess_input
 from PIL import Image
 import numpy as np
 
@@ -55,13 +54,16 @@ def app():
         
         # Ensure that the model input has the batch dimension
         if preprocessed_image.shape[0] == 1:
-            # Use the model to make a prediction
-            prediction = model.predict(preprocessed_image)
-            # Decode the prediction and get the predicted class
-            decoded_prediction = tf.keras.applications.densenet.decode_predictions(prediction, top=1)[0][0]
-            predicted_class, class_name, probability = decoded_prediction
-            # Display the prediction result and probability
-            st.markdown(f'## Result: **{class_name}** (Probability: {probability:.2%})')
+            try:
+                # Use the model to make a prediction
+                prediction = model.predict(preprocessed_image)
+                # Decode the prediction and get the predicted class
+                decoded_prediction = tf.keras.applications.densenet.decode_predictions(prediction, top=1)[0][0]
+                predicted_class, class_name, probability = decoded_prediction
+                # Display the prediction result and probability
+                st.markdown(f'## Result: **{class_name}** (Probability: {probability:.2%})')
+            except Exception as e:
+                st.error(f"Error during prediction: {str(e)}")
 
 if __name__ == '__main__':
     app()
