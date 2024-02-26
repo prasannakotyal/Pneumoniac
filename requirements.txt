@@ -1,4 +1,4 @@
-streamlit==0.88.0
-tensorflow==2.7.0  # Adjust the version based on compatibility
-numpy==1.21.2
+streamlit
+tensorflow # Adjust the version based on compatibility
+numpy
 opencv-python
