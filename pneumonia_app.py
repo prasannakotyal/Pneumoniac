@@ -1,6 +1,6 @@
 import streamlit as st
 import tensorflow as tf
-from tensorflow.keras.applications import DenseNet121, preprocess_input
+from tensorflow.keras.applications.densenet import DenseNet121, preprocess_input
 from PIL import Image
 import numpy as np
 
