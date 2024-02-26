@@ -1,9 +1,9 @@
 import streamlit as st
 import tensorflow as tf
+import numpy as np
 from keras.applications import DenseNet121
 from keras.applications.imagenet_utils import preprocess_input
 from PIL import Image
-import numpy as np
 
 # Load the pre-trained DenseNet121 model
 model = DenseNet121(weights='imagenet', include_top=True)
@@ -24,6 +24,10 @@ def preprocess(image):
     
     # Convert the image to a numpy array
     x = np.array(resized)
+    
+    # Ensure the image has three color channels
+    if x.shape[-1] == 1:  # If the image is grayscale
+        x = np.stack((x, x, x), axis=-1)
     
     # Expand dimensions to create a batch dimension
     x = np.expand_dims(x, axis=0)
