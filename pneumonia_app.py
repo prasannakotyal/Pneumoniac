@@ -27,9 +27,9 @@ def preprocess(image):
     # Ensure the image has three color channels
     if x.shape[-1] == 1:  # If the image is grayscale
         x = np.stack((x, x, x), axis=-1)
-    
-    # Add batch dimension and preprocess using DenseNet121 preprocess_input
-    x = preprocess_input(np.expand_dims(x, axis=0))
+
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
     
     return x
 
